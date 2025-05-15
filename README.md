@@ -35,6 +35,7 @@ Este repositorio aloja el desarrollo de un sistema web integral diseñado para o
 ## 👥 Equipo
 
 - Rubén Jiménez Navarro
+- Camila Alejandra Gallardo Torres
 
 
 #### 🎨 ¿Un banquete de código? ¡Servido! 🍰
