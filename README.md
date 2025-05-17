@@ -37,6 +37,7 @@ Este repositorio aloja el desarrollo de un sistema web integral diseñado para o
 - Rubén Jiménez Navarro
 - Camila Alejandra Gallardo Torres
 - José Efraín Nava Favela
+- Carlos Bernardo Gomez Garcia
 
 
 #### 🎨 ¿Un banquete de código? ¡Servido! 🍰
