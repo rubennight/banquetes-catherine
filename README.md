@@ -38,6 +38,7 @@ Este repositorio aloja el desarrollo de un sistema web integral diseñado para o
 - Camila Alejandra Gallardo Torres
 - José Efraín Nava Favela
 - Carlos Bernardo Gomez Garcia
+- Adán Gurrola Grijalva 
 
 
 #### 🎨 ¿Un banquete de código? ¡Servido! 🍰
