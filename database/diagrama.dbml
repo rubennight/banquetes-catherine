@@ -1,0 +1,96 @@
+Table usuarios {
+  id_usuario int [pk, increment]
+  usuario varchar(50) [not null, unique]
+  password varchar(100) [not null]
+  email varchar(100) [not null, unique]
+  tipo_usuario varchar(20) [note: "Valores: CLIENTE, GERENTE_CUENTAS, GERENTE_EVENTOS, GERENTE_RH, ADMIN"]
+  fecha_creacion datetime [default: `CURRENT_TIMESTAMP`]
+  activo char(1) [default: `'S'`, note: "Valores: S, N"]
+}
+
+Table clientes {
+  id_cliente int [pk, increment]
+  id_usuario int [ref: > usuarios.id_usuario, unique]
+  nombre varchar(100) [not null]
+  apellido varchar(100) [not null]
+  telefono varchar(20)
+  fecha_registro datetime [default: `CURRENT_TIMESTAMP`]
+  rfc varchar(13)
+  direccion varchar(200)
+}
+
+Table empleados {
+  id_empleado int [pk, increment]
+  id_usuario int [ref: > usuarios.id_usuario, unique]
+  tipo_contrato varchar(20) [note: "Valores: TIEMPO_COMPLETO, MEDIO_TIEMPO"]
+  nombre varchar(100) [not null]
+  apellido varchar(100) [not null]
+  puesto varchar(50) [not null]
+  fecha_contratacion datetime [default: `CURRENT_TIMESTAMP`]
+  activo char(1) [default: `'S'`, note: "Valores: S, N"]
+  sueldo numeric
+}
+
+Table gerentes {
+  id_gerente int [pk, increment]
+  id_empleado int [ref: > empleados.id_empleado, unique]
+  tipo_gerente varchar(20) [note: "Valores: CUENTAS, EVENTOS, RH"]
+  especialidad varchar(100)
+  nivel_acceso int [default: 1, note: "Rango permitido: 1 a 3"]
+}
+
+Table platillos {
+    id_platillo int [pk, increment]
+    descripcion varchar(250)
+    tipo_platillo varchar(250) [note: "Valores: ENTRADA, SOPA, PLATILLO_PRINCIPAL, POSTRE, BEBIDA"]
+}
+
+Table ingredientes {
+    id_ingrediente int [pk, increment]
+    descripcion varchar(250)
+    tipo_ingrediente varchar(50) [note: "Valores: LACTEOS, ESPECIAS, VERDURAS, FRUTAS O CARNES"]
+}
+
+Table platillo_ingrediente{
+    id_platillo_ingrediente int [pk, increment]
+    id_platillo int [ref: > platillos.id_platillo, unique]
+    id_ingrediente int [ref: > ingredientes.id_ingrediente]
+    paso int
+    cantidad varchar(250) 
+    modo_preparacion varchar(250)
+    precio numeric
+}
+
+Table eventos {
+    id_evento int [pk, increment]
+    fecha_evento datetime
+    hora_evento datetime
+    tipo_evento varchar(250) [note: "Valores: BODA, BAUTIZO, XVs, EVENTO_CASUAL"]
+    descripcion varchar(250)
+    total_precio numeric
+}
+
+Table evento_empleados {
+    id_evento_empleado int [pk, increment]
+    id_evento int [ref: > eventos.id_evento]
+    id_empleado int [ref: > empleados.id_empleado]
+}
+
+Table evento_menu{
+    id_evento_menu int [pk, increment]
+    id_evento int [ref: > eventos.id_evento]
+    id_menu int [ref: > menus.id_menu]
+}
+
+Table menus {
+    id_menu int [pk, increment]
+    nombre varchar(250)
+    descripcion varchar(250)
+    id_platillo_entrada int [ref: > platillos.id_platillo]
+    id_platillo_sopa int [ref: > platillos.id_platillo]
+    id_platillo_plato_principal int [ref: > platillos.id_platillo]
+    id_platillo_postre int [ref: > platillos.id_platillo]
+    id_platillo_bebidas int [ref: > platillos.id_platillo]
+    id_platillo_infantil int [ref: > platillos.id_platillo]
+    precio numeric
+}
