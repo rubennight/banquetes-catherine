@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Oooh+Baby&display=swap');
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -88,14 +90,17 @@ h1 {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-/* Ajuste para el hero-section */
 .hero-section-container {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 2rem;
   gap: 2rem;
-  flex-wrap: wrap; /* Para responsividad */
+  flex-wrap: wrap;
+  min-height: 100vh; /* Ocupa al menos el 100% del viewport height */
+  box-sizing: border-box; /* Incluye padding en la altura total */
+  margin-top: -40px; /* Compensa el header sticky */
+  padding-top: 80px; /* Vuelve a agregar espacio para el header */
 }
 
 .hero-section {
@@ -169,6 +174,17 @@ h1 {
   position: relative;
 }
 
+.menu-section-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 2rem;
+  flex-wrap: wrap;
+  min-height: 100vh; /* Ocupa al menos el 100% del viewport height */
+  box-sizing: border-box; /* Incluye padding en la altura total */
+}
+
 /* Efecto hover sutil */
 .text-button:hover {
   opacity: 0.8;
@@ -179,6 +195,7 @@ h1 {
 .text-button:active {
   transform: translateY(0);
 }
+
 
 /* Opcional: línea decorativa al pasar el mouse */
 .text-button::after {
@@ -215,4 +232,76 @@ h1 {
 .text-button-get-started:hover {
   opacity: 0.8;
   transform: translateY(-1px);
+}
+
+/* Añade esto a tu archivo CSS */
+.bienvenida-section-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+.bienvenida-contenido {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    gap: 4rem;
+}
+
+.bienvenida-imagen {
+    flex: 1;
+    max-width: 50%;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    object-fit: cover;
+}
+
+.bienvenida-texto-container {
+    flex: 1;
+    text-align: left;
+}
+
+.bienvenida-texto {
+    font-family: 'Oooh Baby', cursive;
+    font-size: 2.5rem;
+    color: #5a4a3a;
+    font-weight: normal;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    line-height: 1.3;
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+/* Responsive para tablets */
+@media (max-width: 992px) {
+    .bienvenida-contenido {
+        flex-direction: column;
+        gap: 2rem;
+    }
+    
+    .bienvenida-imagen {
+        max-width: 80%;
+    }
+    
+    .bienvenida-texto {
+        text-align: center;
+        font-size: 2.8rem;
+    }
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+    .bienvenida-imagen {
+        max-width: 100%;
+    }
+    
+    .bienvenida-texto {
+        font-size: 2.2rem;
+    }
 }

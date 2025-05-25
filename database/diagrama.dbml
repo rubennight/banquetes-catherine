@@ -43,6 +43,8 @@ Table platillos {
     id_platillo int [pk, increment]
     descripcion varchar(250)
     tipo_platillo varchar(250) [note: "Valores: ENTRADA, SOPA, PLATILLO_PRINCIPAL, POSTRE, BEBIDA"]
+    precio_100_personas numeric
+    url_imagen varchar(250)
 }
 
 Table ingredientes {
@@ -58,7 +60,6 @@ Table platillo_ingrediente{
     paso int
     cantidad varchar(250) 
     modo_preparacion varchar(250)
-    precio numeric
 }
 
 Table eventos {

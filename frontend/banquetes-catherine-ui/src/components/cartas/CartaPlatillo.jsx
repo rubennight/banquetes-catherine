@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 const CartaPlatillo = (platillo) =>{
-    
 
     return(
         <div>
