@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&family=Oooh+Baby&display=swap');
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -5,8 +7,19 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  --color-cream: #FFFCF7;
+  --color-gold-light: #f4d9ae9a;
+  --color-beige: #fbfbfb;
+  
+  background: linear-gradient(
+    to bottom right,
+    var(--color-gold-light),
+    var(--color-beige),
+    var(--color-cream)
+  );  min-height: 100vh;
 
+  scroll-behavior: smooth;
+  scrollbar-width: none;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -22,36 +35,9 @@ a:hover {
   color: #535bf2;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
 @media (prefers-color-scheme: light) {
@@ -65,4 +51,257 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+/* Estilos existentes para la LandingPage */
+.header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(170, 170, 170, 0.1); /* Ahora siempre visible */
+  backdrop-filter: blur(5px); /* Efecto glass por defecto */
+  transition: all 0.5s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  align-items: center;
+}
+
+.header.scrolled {
+  padding: 15px 0;
+  backdrop-filter: blur(5px); /* Más oscuro al hacer scroll */
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+}
+
+.header-content {
+  display: flex;
+  justify-content: flex-start; /* Alinea los botones a la derecha */
+  align-items: center;
+  padding-right: 2rem;
+  color: rgba(255, 255, 255, 0.89);
+  font-size: 1.8em;
+  font-weight: bold;
+  text-align: left;
+  opacity: 1; /* Siempre visible ahora */
+  transform: translateY(0); /* Posición normal por defecto */
+  transition: all 0.5s ease;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.hero-section-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 2rem;
+  flex-wrap: wrap;
+  min-height: 100vh; /* Ocupa al menos el 100% del viewport height */
+  box-sizing: border-box; /* Incluye padding en la altura total */
+  margin-top: -40px; /* Compensa el header sticky */
+  padding-top: 80px; /* Vuelve a agregar espacio para el header */
+}
+
+.hero-section {
+  flex: 1;
+  min-width: 300px;
+  height: 400px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 25px;
+}
+
+.hero-description {
+  flex: 1;
+  min-width: 300px;
+  color: #213547;
+  font-size: 1.2em;
+  background-color: rgba(255, 255, 255, 0);
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Animación slide-in (la que ya tenías) */
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.slide-in {
+  animation: slideInFromLeft 1.5s ease-out forwards;
+}
+
+.hero-text.hidden {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+/* Overlay y contenido */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(76, 76, 76, 0.5);
+  z-index: 1;
+  border-radius: 25px;
+}
+
+
+/*  Este es el CSS del botón */
+
+/* Estilos para el botón de texto transparente */
+.text-button {
+  background: transparent;
+  border: none;
+  color: inherit; /* Hereda el color del padre */
+  font: inherit; /* Hereda la fuente del padre */
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  margin: 0 0.5rem;
+  transition: all 0.3s ease;
+  text-shadow: inherit; /* Hereda el text-shadow del padre */
+  position: relative;
+}
+
+.menu-section-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 2rem;
+  flex-wrap: wrap;
+  min-height: 100vh; /* Ocupa al menos el 100% del viewport height */
+  box-sizing: border-box; /* Incluye padding en la altura total */
+}
+
+/* Efecto hover sutil */
+.text-button:hover {
+  opacity: 0.8;
+  transform: translateY(-1px);
+}
+
+/* Efecto al hacer click */
+.text-button:active {
+  transform: translateY(0);
+}
+
+
+/* Opcional: línea decorativa al pasar el mouse */
+.text-button::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transition: all 0.3s ease;
+}
+
+.text-button:hover::after {
+  left: 0;
+  width: 100%;
+}
+
+.text-button-get-started {
+  background: #F6941D;
+  border: none;
+  border-radius: 50px;
+  color: white; /* Hereda el color del padre */
+  font: inherit; /* Hereda la fuente del padre */
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  margin: 0 0.5rem;
+  transition: all 0.3s ease;
+  text-shadow: inherit; /* Hereda el text-shadow del padre */
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.text-button-get-started:hover {
+  opacity: 0.8;
+  transform: translateY(-1px);
+}
+
+/* Añade esto a tu archivo CSS */
+.bienvenida-section-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+.bienvenida-contenido {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    gap: 4rem;
+}
+
+.bienvenida-imagen {
+    flex: 1;
+    max-width: 50%;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    object-fit: cover;
+}
+
+.bienvenida-texto-container {
+    flex: 1;
+    text-align: left;
+}
+
+.bienvenida-texto {
+    font-family: 'Oooh Baby', cursive;
+    font-size: 2.5rem;
+    color: #5a4a3a;
+    font-weight: normal;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    line-height: 1.3;
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+/* Responsive para tablets */
+@media (max-width: 992px) {
+    .bienvenida-contenido {
+        flex-direction: column;
+        gap: 2rem;
+    }
+    
+    .bienvenida-imagen {
+        max-width: 80%;
+    }
+    
+    .bienvenida-texto {
+        text-align: center;
+        font-size: 2.8rem;
+    }
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+    .bienvenida-imagen {
+        max-width: 100%;
+    }
+    
+    .bienvenida-texto {
+        font-size: 2.2rem;
+    }
 }
