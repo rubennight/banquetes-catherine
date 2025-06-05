@@ -35,3 +35,67 @@ def obtener_usuarios():
     cursor.execute("SELECT * FROM usuarios")
     columnas = [col[0].lower() for col in cursor.description]
     return [dict(zip(columnas, fila)) for fila in cursor.fetchall()]
+
+def obtener_usuario_por_id(id_usuario):
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT * FROM usuarios WHERE id_usuario = :1", [id_usuario])
+    resultado = cursor.fetchone()
+    
+    if resultado:
+        columnas = [col[0].lower() for col in cursor.description]
+        return dict(zip(columnas, resultado))
+    return None
+
+def actualizar_usuario(id_usuario, usuario, email, tipo_usuario, activo):
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    
+    cursor.execute("""
+        UPDATE usuarios 
+        SET usuario = :1, email = :2, tipo_usuario = :3, activo = :4 
+        WHERE id_usuario = :5
+    """, [usuario, email, tipo_usuario, activo, id_usuario])
+    
+    filas_afectadas = cursor.rowcount
+    conexion.commit()
+    return filas_afectadas > 0
+
+def cambiar_password(id_usuario, nuevo_password):
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    
+    cursor.execute("""
+        UPDATE usuarios 
+        SET password = :1 
+        WHERE id_usuario = :2
+    """, [nuevo_password, id_usuario])
+    
+    filas_afectadas = cursor.rowcount
+    conexion.commit()
+    return filas_afectadas > 0
+
+def eliminar_usuario(id_usuario):
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    
+    cursor.execute("UPDATE usuarios SET activo = 'N' WHERE id_usuario = :1", [id_usuario])
+    
+    filas_afectadas = cursor.rowcount
+    conexion.commit()
+    return filas_afectadas > 0
+
+def verificar_credenciales(usuario, password):
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    
+    cursor.execute("""
+        SELECT id_usuario, tipo_usuario 
+        FROM usuarios 
+        WHERE usuario = :1 AND password = :2 AND activo = 'S'
+    """, [usuario, password])
+    
+    resultado = cursor.fetchone()
+    if resultado:
+        return {"id_usuario": resultado[0], "tipo_usuario": resultado[1]}
+    return None
