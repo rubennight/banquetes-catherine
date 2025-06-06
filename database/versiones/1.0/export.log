@@ -1,0 +1,37 @@
+;;; 
+Export: Release 21.0.0.0.0 - Production on Vie Jun 6 11:46:06 2025
+Version 21.3.0.0.0
+
+Copyright (c) 1982, 2021, Oracle and/or its affiliates.  All rights reserved.
+;;; 
+Conectado a: Oracle Database 21c Express Edition Release 21.0.0.0.0 - Production
+Iniciando "SYSTEM"."SYS_EXPORT_SCHEMA_01":  system/********@localhost/XEPDB1 schemas=banquetes_admin \ 
+Procesando el tipo de objeto SCHEMA_EXPORT/TABLE/TABLE_DATA
+Procesando el tipo de objeto SCHEMA_EXPORT/TABLE/INDEX/STATISTICS/INDEX_STATISTICS
+Procesando el tipo de objeto SCHEMA_EXPORT/TABLE/STATISTICS/TABLE_STATISTICS
+Procesando el tipo de objeto SCHEMA_EXPORT/STATISTICS/MARKER
+Procesando el tipo de objeto SCHEMA_EXPORT/ROLE_GRANT
+Procesando el tipo de objeto SCHEMA_EXPORT/DEFAULT_ROLE
+Procesando el tipo de objeto SCHEMA_EXPORT/TABLESPACE_QUOTA
+Procesando el tipo de objeto SCHEMA_EXPORT/PRE_SCHEMA/PROCACT_SCHEMA
+Procesando el tipo de objeto SCHEMA_EXPORT/SEQUENCE/SEQUENCE
+Procesando el tipo de objeto SCHEMA_EXPORT/TABLE/TABLE
+Procesando el tipo de objeto SCHEMA_EXPORT/TABLE/CONSTRAINT/CONSTRAINT
+Procesando el tipo de objeto SCHEMA_EXPORT/TABLE/CONSTRAINT/REF_CONSTRAINT
+Procesando el tipo de objeto SCHEMA_EXPORT/TABLE/TRIGGER
+. . "BANQUETES_ADMIN"."EMPLEADOS"               10.21 KB      33 filas exportadas
+. . "BANQUETES_ADMIN"."USUARIOS"                9.851 KB      34 filas exportadas
+. . "BANQUETES_ADMIN"."CLIENTES"                8.101 KB       1 filas exportadas
+. . "BANQUETES_ADMIN"."GERENTES"                7.031 KB       5 filas exportadas
+. . "BANQUETES_ADMIN"."EVENTOS"                 7.484 KB       6 filas exportadas
+. . "BANQUETES_ADMIN"."EVENTO_EMPLEADOS"            6 KB       6 filas exportadas
+. . "BANQUETES_ADMIN"."EVENTO_MENU"             5.984 KB       5 filas exportadas
+. . "BANQUETES_ADMIN"."INGREDIENTES"            6.046 KB       5 filas exportadas
+. . "BANQUETES_ADMIN"."MENUS"                   9.515 KB      10 filas exportadas
+. . "BANQUETES_ADMIN"."PLATILLOS"               7.093 KB       5 filas exportadas
+. . "BANQUETES_ADMIN"."PLATILLO_INGREDIENTE"    7.367 KB       5 filas exportadas
+La tabla maestra "SYSTEM"."SYS_EXPORT_SCHEMA_01" se ha cargado/descargado correctamente
+******************************************************************************
+El juego de archivos de volcado para SYSTEM.SYS_EXPORT_SCHEMA_01 es:
+  C:\APP\RUBIS\PRODUCT\21C\ADMIN\XE\DPDUMP\15FD4DEDF1164869B0D4C26FE7AB3433\EXPDAT.DMP
+El trabajo "SYSTEM"."SYS_EXPORT_SCHEMA_01" ha terminado correctamente en Vie Jun 6 11:46:39 2025 elapsed 0 00:00:29

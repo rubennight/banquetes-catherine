@@ -221,3 +221,21 @@ INSERT INTO gerentes (id_empleado, tipo_gerente, especialidad, nivel_acceso) VAL
 (5, 'EVENTOS', 'Bodas y Eventos Especiales', 2);
 
 COMMIT;
+
+-- Insertar ingredientes
+INSERT INTO ingredientes (descripcion, tipo_ingrediente) VALUES ('Tomate', 'VERDURAS');
+INSERT INTO ingredientes (descripcion, tipo_ingrediente) VALUES ('Queso', 'LACTEOS');
+INSERT INTO ingredientes (descripcion, tipo_ingrediente) VALUES ('Carne de res', 'CARNES');
+INSERT INTO ingredientes (descripcion, tipo_ingrediente) VALUES ('Fresa', 'FRUTAS');
+INSERT INTO ingredientes (descripcion, tipo_ingrediente) VALUES ('Orégano', 'ESPECIAS');
+
+COMMIT;
+
+-- Insertar platillos
+INSERT INTO platillos (descripcion, tipo_platillo, precio_100_personas, url_imagen) VALUES ('Ensalada César', 'ENTRADA', 2000, 'http://example.com/ensalada.jpg');
+INSERT INTO platillos (descripcion, tipo_platillo, precio_100_personas, url_imagen) VALUES ('Sopa de tomate', 'SOPA', 1500, 'http://example.com/sopa.jpg');
+INSERT INTO platillos (descripcion, tipo_platillo, precio_100_personas, url_imagen) VALUES ('Carne asada', 'PLATILLO_PRINCIPAL', 3000, 'http://example.com/carne.jpg');
+INSERT INTO platillos (descripcion, tipo_platillo, precio_100_personas, url_imagen) VALUES ('Pastel de fresa', 'POSTRE', 2500, 'http://example.com/pastel.jpg');
+INSERT INTO platillos (descripcion, tipo_platillo, precio_100_personas, url_imagen) VALUES ('Jugo de naranja', 'BEBIDA', 1000, 'http://example.com/jugo.jpg');
+
+COMMIT;

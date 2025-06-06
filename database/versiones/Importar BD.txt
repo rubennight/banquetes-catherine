@@ -1,0 +1,21 @@
+1.- Se abre una terminal en la ubicación del archivo bd_1_0.DMP
+
+2.- en el siguiente comando de terminal cambiar EXPORT_DIR a la ruta donde esta su archivo
+
+impdp system/password@localhost/XEPDB1 schemas=banquetes_admin \
+dumpfile=banquetes_admin.dmp \
+logfile=imp_banquetes_admin.log \
+directory=EXPORT_DIR \
+remap_schema=banquetes_admin:banquetes_admin_restored
+
+
+* o en su defecto, con el usuario system crear un directorio lógico y dar permisos al usuario banquetes_admin para usar el directorio:
+
+-- Conéctate como SYSTEM
+CONNECT system/password@localhost/XEPDB1
+
+-- Crear un directorio lógico (ajusta la ruta a una válida en tu sistema)
+CREATE OR REPLACE DIRECTORY EXPORT_DIR AS '/opt/oracle/exports';
+
+-- Dar permisos al usuario para usar el directorio
+GRANT READ, WRITE ON DIRECTORY EXPORT_DIR TO banquetes_admin;
