@@ -1,3 +1,4 @@
 {
-    "dbmlERDPreviewer.preferredTheme": "light"
+    "dbmlERDPreviewer.preferredTheme": "light",
+    "sqltools.connections": []
 }
