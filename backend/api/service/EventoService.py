@@ -1,37 +1,24 @@
-from datetime import datetime
+from model.EventoModel import (
+    asignar_empleados_model,
+    listar_eventos_model,
+    buscar_eventos_por_fecha_model,
+    registrar_evento_model
+)
 
 class EventoService:
-    def __init__(self, database):
-        self.db = database
-        self.tabla = "eventos"
 
-    def crear_evento(self, evento):
-        """
-        Recibe un objeto Evento y lo guarda en la base de datos.
-        """
-        evento_dict = evento.to_dict()
-        self.db.insertar(self.tabla, evento_dict)
+    @staticmethod
+    def asignar_empleados_evento(data):
+        return asignar_empleados_model(data)
 
-    def obtener_evento_por_id(self, id_evento):
-        """
-        Busca y devuelve un evento por su ID.
-        """
-        return self.db.obtener_por_id(self.tabla, id_evento)
+    @staticmethod
+    def listar_eventos():
+        return listar_eventos_model()
 
-    def obtener_todos_los_eventos(self):
-        """
-        Devuelve todos los eventos almacenados.
-        """
-        return self.db.obtener_todos(self.tabla)
+    @staticmethod
+    def buscar_eventos_por_fecha(fecha_str):
+        return buscar_eventos_por_fecha_model(fecha_str)
 
-    def actualizar_evento(self, id_evento, datos_actualizados):
-        """
-        Actualiza un evento con nuevos datos.
-        """
-        return self.db.actualizar(self.tabla, id_evento, datos_actualizados)
-
-    def eliminar_evento(self, id_evento):
-        """
-        Elimina un evento por ID.
-        """
-        return self.db.eliminar(self.tabla, id_evento)
+    @staticmethod
+    def registrar_evento(data):
+        return registrar_evento_model(data)
