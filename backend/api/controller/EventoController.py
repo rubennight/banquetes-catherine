@@ -21,5 +21,10 @@ def buscar_eventos_por_fecha():
 
 @evento_controller.route('/eventos/registrar', methods=['POST'])
 def registrar_evento():
-    data = request.get_json()
-    return EventoService.registrar_evento(data)
+    try:
+        data = request.json
+        if not data:
+            return jsonify({"error": "No se recibieron datos", "codigo": 400}), 400
+        return EventoService.registrar_evento(data)
+    except Exception as e:
+        return jsonify({"error": str(e), "codigo": 500}), 500

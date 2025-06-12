@@ -21,21 +21,27 @@ def empleados_por_evento(id_evento):
     conexion.close()
     return empleados
 
-def empleados_disponibles(cursor, fecha_evento, id_evento):
-    cursor.execute("""
-        SELECT id_empleado, nombre, apellido, puesto 
-        FROM empleados 
-        WHERE id_empleado NOT IN (
-            SELECT id_empleado FROM evento_empleados ee
-            JOIN eventos ev ON ee.id_evento = ev.id_evento
-            WHERE ev.fecha_evento = :1
-        )
-    """, (fecha_evento,))
-    return [
-        {
-            "idEmpleado": row[0],
-            "nombre": row[1],
-            "apellido": row[2],
-            "puesto": row[3]
-        } for row in cursor.fetchall()
-    ]
+def empleados_disponibles(fecha_evento, id_evento):
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    try:
+        cursor.execute("""
+            SELECT id_empleado, nombre, apellido, puesto 
+            FROM empleados 
+            WHERE id_empleado NOT IN (
+                SELECT id_empleado FROM evento_empleados ee
+                JOIN eventos ev ON ee.id_evento = ev.id_evento
+                WHERE ev.fecha_evento = :1
+            )
+        """, (fecha_evento,))
+        return [
+            {
+                "idEmpleado": row[0],
+                "nombre": row[1],
+                "apellido": row[2],
+                "puesto": row[3]
+            } for row in cursor.fetchall()
+        ]
+    finally:
+        cursor.close()
+        conexion.close()

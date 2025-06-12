@@ -3,6 +3,33 @@ from flask import jsonify
 from datetime import datetime
 import oracledb
 
+def evento_existe(id_evento):
+    """
+    Verifica si existe un evento con el ID especificado
+    """
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    try:
+        cursor.execute("SELECT 1 FROM eventos WHERE id_evento = :1", (id_evento,))
+        return cursor.fetchone() is not None
+    finally:
+        cursor.close()
+        conexion.close()
+
+def obtener_fecha_evento(id_evento):
+    """
+    Obtiene la fecha de un evento específico
+    """
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    try:
+        cursor.execute("SELECT fecha_evento FROM eventos WHERE id_evento = :1", (id_evento,))
+        resultado = cursor.fetchone()
+        return resultado[0] if resultado else None
+    finally:
+        cursor.close()
+        conexion.close()
+
 def asignar_empleados_model(data):
     id_evento = data.get('id_evento')
     empleados = data.get('empleados')
@@ -164,147 +191,181 @@ def buscar_eventos_por_fecha_model(fecha_str):
 
 
 def registrar_evento_model(data):
-    campos_requeridos = ["fechaEvento", "tipoEvento", "descripcion", "idUsuario", "menu"]
-    faltantes = [campo for campo in campos_requeridos if campo not in data or data[campo] is None]
-    if faltantes:
-        return jsonify({"error": f"Campos faltantes: {faltantes}", "codigo": 400}), 400
-
-    tipos_validos = ['BODA', 'BAUTIZO', 'XVs', 'EVENTO_CASUAL']
-    if data["tipoEvento"] not in tipos_validos:
-        return jsonify({"error": "Tipo de evento inválido", "codigo": 400}), 400
-
     try:
-        fecha_completa = datetime.strptime(data["fechaEvento"], "%d-%m-%Y %H:%M:%S")
-    except ValueError:
-        return jsonify({"error": "Formato de fechaEvento inválido. Use dd-mm-yyyy HH:MM:SS", "codigo": 400}), 400
+        fecha_evento = datetime.strptime(data["fechaEvento"], "%d-%m-%Y %H:%M:%S")
+        tipo_evento = data["tipoEvento"]
+        descripcion_evento = data["descripcion"]
+        id_usuario = data["idUsuario"]
+        menu_data = data["menu"]
 
-    tipo_evento = data["tipoEvento"]
-    descripcion_evento = data["descripcion"]
-    id_usuario = data["idUsuario"]
-    menu_data = data["menu"]
+        print(f"Recibido idUsuario: {id_usuario}")  # Log del ID recibido
 
-    conexion = obtener_conexion()
-    cursor = conexion.cursor()
+        conexion = obtener_conexion()
+        cursor = conexion.cursor()
 
-    try:
-        # Verificar si existe el cliente
-        cursor.execute("SELECT id_cliente FROM clientes WHERE id_usuario = :1", (id_usuario,))
-        cliente = cursor.fetchone()
-        if not cliente:
-            return jsonify({"error": "Cliente no encontrado para ese idUsuario", "codigo": 404}), 404
-        id_cliente = cliente[0]
-
-        # Obtener siguiente ID de evento usando la secuencia
-        cursor.execute("SELECT seq_eventos.NEXTVAL FROM DUAL")
-        id_evento = cursor.fetchone()[0]
-
-        # Insertar evento
-        cursor.execute("""
-            INSERT INTO eventos (id_evento, fecha_evento, tipo_evento, descripcion)
-            VALUES (:1, :2, :3, :4)
-        """, [id_evento, fecha_completa, tipo_evento, descripcion_evento])
-
-        # La tabla evento_cliente tiene su propia secuencia, dejamos que el trigger la maneje
-        cursor.execute("""
-            INSERT INTO evento_cliente (id_evento, id_cliente)
-            VALUES (:1, :2)
-        """, (id_evento, id_cliente))
-
-        id_menu = menu_data.get("idMenu")
-        if id_menu is not None:
-            cursor.execute("SELECT id_menu FROM menus WHERE id_menu = :1", (id_menu,))
-            if not cursor.fetchone():
-                return jsonify({"error": "Menú no encontrado", "codigo": 404}), 404
-        else:
-            campos_menu_requeridos = ["nombre", "descripcion", "idPlatilloEntrada", 
-                                      "idPlatilloPlatoPrincipal", "idPlatilloPostre", 
-                                      "idPlatilloBebidas"]
-            for campo in campos_menu_requeridos:
-                if campo not in menu_data:
-                    return jsonify({
-                        "error": f"Campo '{campo}' requerido para menú personalizado",
-                        "codigo": 400
-                    }), 400
-
+        try:
+            # Verificar si existe el cliente y obtener información completa
             cursor.execute("""
-                SELECT id_menu FROM menus
-                WHERE id_platillo_entrada = :1 
-                AND NVL(id_platillo_sopa, -1) = NVL(:2, -1)
-                AND id_platillo_plato_principal = :3 
-                AND id_platillo_postre = :4
-                AND id_platillo_bebidas = :5
-                AND NVL(id_platillo_infantil, -1) = NVL(:6, -1)
-            """, (
-                menu_data["idPlatilloEntrada"], 
-                menu_data.get("idPlatilloSopa"),
-                menu_data["idPlatilloPlatoPrincipal"],
-                menu_data["idPlatilloPostre"],
-                menu_data["idPlatilloBebidas"],
-                menu_data.get("idPlatilloInfantil")
-            ))
+                SELECT c.id_cliente, u.usuario, u.email 
+                FROM clientes c
+                JOIN usuarios u ON c.id_usuario = u.id_usuario
+                WHERE c.id_usuario = :1
+            """, (id_usuario,))
+            cliente = cursor.fetchone()
+            
+            if not cliente:
+                print(f"No se encontró cliente para el idUsuario: {id_usuario}")  # Log si no se encuentra
+                return jsonify({"error": "Cliente no encontrado para ese idUsuario", "codigo": 404}), 404
+                
+            id_cliente = cliente[0]
+            print(f"Cliente encontrado - ID: {id_cliente}, Usuario: {cliente[1]}, Email: {cliente[2]}")  # Log del cliente encontrado
 
-            menu_existente = cursor.fetchone()
-            if menu_existente:
-                id_menu = menu_existente[0]
-            else:
-                # Obtener siguiente ID de menú usando la secuencia
-                cursor.execute("SELECT seq_menus.NEXTVAL FROM DUAL")
-                id_menu = cursor.fetchone()[0]
+            # Verificar si ya existe un evento para este cliente en la misma fecha
+            cursor.execute("""
+                SELECT e.id_evento 
+                FROM eventos e
+                JOIN evento_cliente ec ON e.id_evento = ec.id_evento
+                WHERE ec.id_cliente = :1 
+                AND TRUNC(e.fecha_evento) = TRUNC(:2)
+            """, (id_cliente, fecha_evento))
+            
+            evento_existente = cursor.fetchone()
+            if evento_existente:
+                return jsonify({
+                    "error": "Ya existe un evento registrado para este cliente en la misma fecha",
+                    "codigo": 400
+                }), 400
 
-                # Insertar nuevo menú
+            # Obtener siguiente ID de evento usando la secuencia
+            cursor.execute("SELECT seq_eventos.NEXTVAL FROM DUAL")
+            id_evento = cursor.fetchone()[0]
+
+            try:
+                # Insertar evento
                 cursor.execute("""
-                    INSERT INTO menus (
-                        id_menu, nombre, descripcion,
-                        id_platillo_entrada, id_platillo_sopa,
-                        id_platillo_plato_principal, id_platillo_postre,
-                        id_platillo_bebidas, id_platillo_infantil
-                    ) VALUES (:1, :2, :3, :4, :5, :6, :7, :8, :9)
-                """, [
-                    id_menu,
-                    menu_data["nombre"],
-                    menu_data["descripcion"],
-                    menu_data["idPlatilloEntrada"],
+                    INSERT INTO eventos (id_evento, fecha_evento, tipo_evento, descripcion)
+                    VALUES (:1, :2, :3, :4)
+                """, [id_evento, fecha_evento, tipo_evento, descripcion_evento])
+            except Exception as e:
+                print(f"Error al insertar evento: {str(e)}")
+                print(f"Datos: id_evento={id_evento}, fecha={fecha_evento}, tipo={tipo_evento}")
+                raise e
+
+            try:
+                # Insertar en evento_cliente
+                cursor.execute("""
+                    INSERT INTO evento_cliente (id_evento, id_cliente)
+                    VALUES (:1, :2)
+                """, (id_evento, id_cliente))
+            except Exception as e:
+                print(f"Error al insertar evento_cliente: {str(e)}")
+                print(f"Datos: id_evento={id_evento}, id_cliente={id_cliente}")
+                raise e
+
+            # Procesar menú
+            id_menu = menu_data.get("idMenu")
+            if id_menu is not None:
+                cursor.execute("SELECT id_menu FROM menus WHERE id_menu = :1", (id_menu,))
+                if not cursor.fetchone():
+                    return jsonify({"error": "Menú no encontrado", "codigo": 404}), 404
+            else:
+                # Validar campos requeridos del menú personalizado
+                campos_menu_requeridos = ["nombre", "descripcion", "idPlatilloEntrada", 
+                                        "idPlatilloPlatoPrincipal", "idPlatilloPostre", 
+                                        "idPlatilloBebidas"]
+                for campo in campos_menu_requeridos:
+                    if campo not in menu_data:
+                        return jsonify({
+                            "error": f"Campo '{campo}' requerido para menú personalizado",
+                            "codigo": 400
+                        }), 400
+
+                # Verificar si existe un menú igual
+                cursor.execute("""
+                    SELECT id_menu FROM menus
+                    WHERE id_platillo_entrada = :1 
+                    AND NVL(id_platillo_sopa, -1) = NVL(:2, -1)
+                    AND id_platillo_plato_principal = :3 
+                    AND id_platillo_postre = :4
+                    AND id_platillo_bebidas = :5
+                    AND NVL(id_platillo_infantil, -1) = NVL(:6, -1)
+                """, (
+                    menu_data["idPlatilloEntrada"], 
                     menu_data.get("idPlatilloSopa"),
                     menu_data["idPlatilloPlatoPrincipal"],
                     menu_data["idPlatilloPostre"],
                     menu_data["idPlatilloBebidas"],
                     menu_data.get("idPlatilloInfantil")
-                ])
+                ))
 
-        cursor.execute("""
-            INSERT INTO evento_menu (id_evento, id_menu)
-            VALUES (:1, :2)
-        """, (id_evento, id_menu))
+                menu_existente = cursor.fetchone()
+                if menu_existente:
+                    id_menu = menu_existente[0]
+                else:
+                    # Crear nuevo menú
+                    cursor.execute("SELECT seq_menus.NEXTVAL FROM DUAL")
+                    id_menu = cursor.fetchone()[0]
 
-        cursor.execute("""
-            SELECT COALESCE(SUM(p.precio_100_personas), 0)
-            FROM menus m
-            LEFT JOIN platillos p ON 
-                p.id_platillo IN (
-                    m.id_platillo_entrada, m.id_platillo_sopa,
-                    m.id_platillo_plato_principal, m.id_platillo_postre,
-                    m.id_platillo_bebidas, m.id_platillo_infantil
-                )
-            WHERE m.id_menu = :1
-        """, (id_menu,))
-        precio_total = cursor.fetchone()[0]
+                    cursor.execute("""
+                        INSERT INTO menus (
+                            id_menu, nombre, descripcion,
+                            id_platillo_entrada, id_platillo_sopa,
+                            id_platillo_plato_principal, id_platillo_postre,
+                            id_platillo_bebidas, id_platillo_infantil
+                        ) VALUES (:1, :2, :3, :4, :5, :6, :7, :8, :9)
+                    """, [
+                        id_menu,
+                        menu_data["nombre"],
+                        menu_data["descripcion"],
+                        menu_data["idPlatilloEntrada"],
+                        menu_data.get("idPlatilloSopa"),
+                        menu_data["idPlatilloPlatoPrincipal"],
+                        menu_data["idPlatilloPostre"],
+                        menu_data["idPlatilloBebidas"],
+                        menu_data.get("idPlatilloInfantil")
+                    ])
 
-        cursor.execute("""
-            UPDATE eventos 
-            SET total_precio = :1 
-            WHERE id_evento = :2
-        """, (precio_total, id_evento))
+            # Insertar relación evento-menú
+            cursor.execute("""
+                INSERT INTO evento_menu (id_evento, id_menu)
+                VALUES (:1, :2)
+            """, (id_evento, id_menu))
 
-        conexion.commit()
+            # Calcular precio total
+            cursor.execute("""
+                SELECT COALESCE(SUM(p.precio_100_personas), 0)
+                FROM menus m
+                LEFT JOIN platillos p ON 
+                    p.id_platillo IN (
+                        m.id_platillo_entrada, m.id_platillo_sopa,
+                        m.id_platillo_plato_principal, m.id_platillo_postre,
+                        m.id_platillo_bebidas, m.id_platillo_infantil
+                    )
+                WHERE m.id_menu = :1
+            """, (id_menu,))
+            precio_total = cursor.fetchone()[0]
 
-        return jsonify({
-            "idEvento": id_evento,
-            "precio": precio_total
-        }), 200
+            # Actualizar precio en evento
+            cursor.execute("""
+                UPDATE eventos 
+                SET total_precio = :1 
+                WHERE id_evento = :2
+            """, (precio_total, id_evento))
+
+            conexion.commit()
+
+            return jsonify({
+                "idEvento": id_evento,
+                "precio": precio_total
+            }), 200
+
+        except Exception as e:
+            conexion.rollback()
+            raise e
+        finally:
+            cursor.close()
+            conexion.close()
 
     except Exception as e:
-        conexion.rollback()
+        print(f"Error en registrar_evento_model: {str(e)}")  # Para debug
         return jsonify({"error": str(e), "codigo": 500}), 500
-    finally:
-        cursor.close()
-        conexion.close()

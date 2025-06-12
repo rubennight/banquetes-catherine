@@ -1,3 +1,4 @@
+from flask import jsonify
 from model.EventoModel import (
     asignar_empleados_model,
     listar_eventos_model,
@@ -21,4 +22,18 @@ class EventoService:
 
     @staticmethod
     def registrar_evento(data):
-        return registrar_evento_model(data)
+        # Validar que data sea un diccionario
+        if not isinstance(data, dict):
+            return jsonify({"error": "Formato de datos inválido", "codigo": 400}), 400
+            
+        # Validar campos requeridos
+        campos_requeridos = ["fechaEvento", "tipoEvento", "descripcion", "idUsuario", "menu"]
+        faltantes = [campo for campo in campos_requeridos if campo not in data]
+        if faltantes:
+            return jsonify({"error": f"Campos faltantes: {faltantes}", "codigo": 400}), 400
+            
+        try:
+            return registrar_evento_model(data)
+        except Exception as e:
+            print(f"Error en registrar_evento_service: {str(e)}")  # Para debug
+            return jsonify({"error": str(e), "codigo": 500}), 500
