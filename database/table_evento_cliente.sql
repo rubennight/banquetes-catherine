@@ -18,7 +18,7 @@ BEGIN
 END;
 /
 
+--Esto se debe hacer para que permita insertar nuevos menus
+DROP SEQUENCE seq_evento_menu;
 
-SELECT id_platillo, descripcion, tipo_platillo 
-FROM platillos 
-ORDER BY id_platillo;
+CREATE SEQUENCE seq_evento_menu START WITH 6 INCREMENT BY 1 NOCACHE NOCYCLE;

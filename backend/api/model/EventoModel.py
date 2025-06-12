@@ -206,19 +206,23 @@ def registrar_evento_model(data):
         try:
             # Verificar si existe el cliente y obtener información completa
             cursor.execute("""
-                SELECT c.id_cliente, u.usuario, u.email 
-                FROM clientes c
-                JOIN usuarios u ON c.id_usuario = u.id_usuario
-                WHERE c.id_usuario = :1
+                SELECT c.id_cliente, u.usuario, u.email, u.tipo_usuario
+                FROM usuarios u
+                LEFT JOIN clientes c ON c.id_usuario = u.id_usuario
+                WHERE u.id_usuario = :1
             """, (id_usuario,))
-            cliente = cursor.fetchone()
+            resultado = cursor.fetchone()
             
-            if not cliente:
-                print(f"No se encontró cliente para el idUsuario: {id_usuario}")  # Log si no se encuentra
-                return jsonify({"error": "Cliente no encontrado para ese idUsuario", "codigo": 404}), 404
-                
-            id_cliente = cliente[0]
-            print(f"Cliente encontrado - ID: {id_cliente}, Usuario: {cliente[1]}, Email: {cliente[2]}")  # Log del cliente encontrado
+            if not resultado or not resultado[0]:
+                print(f"No se encontró cliente para el idUsuario: {id_usuario}")
+                return jsonify({"error": "Cliente no encontrado para ese idUsuario o el usuario no es un cliente", "codigo": 404}), 404
+            
+            id_cliente = resultado[0]
+            print(f"Cliente encontrado - ID: {id_cliente}, Usuario: {resultado[1]}, Email: {resultado[2]}, Tipo: {resultado[3]}")
+
+            # Verificar que el usuario sea de tipo CLIENTE
+            if resultado[3] != 'CLIENTE':
+                return jsonify({"error": "El usuario no es de tipo CLIENTE", "codigo": 400}), 400
 
             # Verificar si ya existe un evento para este cliente en la misma fecha
             cursor.execute("""
@@ -236,23 +240,23 @@ def registrar_evento_model(data):
                     "codigo": 400
                 }), 400
 
-            # Obtener siguiente ID de evento usando la secuencia
-            cursor.execute("SELECT seq_eventos.NEXTVAL FROM DUAL")
-            id_evento = cursor.fetchone()[0]
-
             try:
-                # Insertar evento
+                # Insertar evento dejando que la secuencia maneje el ID
                 cursor.execute("""
-                    INSERT INTO eventos (id_evento, fecha_evento, tipo_evento, descripcion)
-                    VALUES (:1, :2, :3, :4)
-                """, [id_evento, fecha_evento, tipo_evento, descripcion_evento])
+                    INSERT INTO eventos (fecha_evento, tipo_evento, descripcion)
+                    VALUES (:1, :2, :3)
+                    RETURNING id_evento INTO :4
+                """, [fecha_evento, tipo_evento, descripcion_evento, cursor.var(oracledb.NUMBER)])
+                
+                id_evento = cursor.var.getvalue()[0]
+                print(f"ID de evento generado automáticamente: {id_evento}")  # Debug log
             except Exception as e:
                 print(f"Error al insertar evento: {str(e)}")
-                print(f"Datos: id_evento={id_evento}, fecha={fecha_evento}, tipo={tipo_evento}")
+                print(f"Datos: fecha={fecha_evento}, tipo={tipo_evento}")
                 raise e
 
             try:
-                # Insertar en evento_cliente
+                # Insertar en evento_cliente (la fecha_registro se maneja por DEFAULT SYSDATE)
                 cursor.execute("""
                     INSERT INTO evento_cliente (id_evento, id_cliente)
                     VALUES (:1, :2)
@@ -260,6 +264,7 @@ def registrar_evento_model(data):
             except Exception as e:
                 print(f"Error al insertar evento_cliente: {str(e)}")
                 print(f"Datos: id_evento={id_evento}, id_cliente={id_cliente}")
+                conexion.rollback()
                 raise e
 
             # Procesar menú
@@ -267,6 +272,7 @@ def registrar_evento_model(data):
             if id_menu is not None:
                 cursor.execute("SELECT id_menu FROM menus WHERE id_menu = :1", (id_menu,))
                 if not cursor.fetchone():
+                    conexion.rollback()
                     return jsonify({"error": "Menú no encontrado", "codigo": 404}), 404
             else:
                 # Validar campos requeridos del menú personalizado
@@ -275,6 +281,7 @@ def registrar_evento_model(data):
                                         "idPlatilloBebidas"]
                 for campo in campos_menu_requeridos:
                     if campo not in menu_data:
+                        conexion.rollback()
                         return jsonify({
                             "error": f"Campo '{campo}' requerido para menú personalizado",
                             "codigo": 400
@@ -302,19 +309,16 @@ def registrar_evento_model(data):
                 if menu_existente:
                     id_menu = menu_existente[0]
                 else:
-                    # Crear nuevo menú
-                    cursor.execute("SELECT seq_menus.NEXTVAL FROM DUAL")
-                    id_menu = cursor.fetchone()[0]
-
+                    # Crear nuevo menú usando RETURNING
                     cursor.execute("""
                         INSERT INTO menus (
-                            id_menu, nombre, descripcion,
+                            nombre, descripcion,
                             id_platillo_entrada, id_platillo_sopa,
                             id_platillo_plato_principal, id_platillo_postre,
                             id_platillo_bebidas, id_platillo_infantil
-                        ) VALUES (:1, :2, :3, :4, :5, :6, :7, :8, :9)
+                        ) VALUES (:1, :2, :3, :4, :5, :6, :7, :8)
+                        RETURNING id_menu INTO :9
                     """, [
-                        id_menu,
                         menu_data["nombre"],
                         menu_data["descripcion"],
                         menu_data["idPlatilloEntrada"],
@@ -322,8 +326,10 @@ def registrar_evento_model(data):
                         menu_data["idPlatilloPlatoPrincipal"],
                         menu_data["idPlatilloPostre"],
                         menu_data["idPlatilloBebidas"],
-                        menu_data.get("idPlatilloInfantil")
+                        menu_data.get("idPlatilloInfantil"),
+                        cursor.var(oracledb.NUMBER)
                     ])
+                    id_menu = cursor.var.getvalue()[0]
 
             # Insertar relación evento-menú
             cursor.execute("""
