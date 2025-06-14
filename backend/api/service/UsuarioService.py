@@ -1,30 +1,40 @@
-# service/UsuarioService.py
-from model import ClienteModel
-from model import UsuarioModel
+from flask import jsonify
+from model.UsuarioModel import UsuarioModel
 
-def registrar_usuario(data):
-    usuario = data["usuario"]
-    password = data["password"]
-    email = data["email"]
-    tipo_usuario = data["tipo_usuario"]
-    nombre = data["nombre"]
-    apellido = data["apellido"]
-    telefono = data.get("telefono")
-    rfc = data.get("rfc")
-    direccion = data.get("direccion")
+class UsuarioService:
 
-    if UsuarioModel.usuario_existe(usuario):
-        return {"error": "El nombre de usuario ya está en uso"}, 400
+    @staticmethod
+    def registrar_usuario(data):
+        """
+        Registra un nuevo usuario en el sistema
+        """
+        try:
+            response, status = UsuarioModel.insertar_usuario(data)
+            return jsonify(response), status
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
 
-    if UsuarioModel.email_existe(email):
-        return {"error": "El email ya está registrado"}, 400
+    @staticmethod
+    def listar_usuarios():
+        """
+        Obtiene la lista de todos los usuarios
+        """
+        try:
+            usuarios, status = UsuarioModel.obtener_usuarios()
+            return jsonify(usuarios), status
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
 
-    id_usuario = UsuarioModel.insertar_usuario(usuario, password, email, tipo_usuario)
+    @staticmethod
+    def login(usuario, password):
+        """
+        Autentica un usuario en el sistema
+        """
+        if not usuario or not password:
+            return jsonify({"error": "Faltan credenciales", "codigo": 400}), 400
 
-    if tipo_usuario == "CLIENTE":
-        ClienteModel.insertar_cliente(id_usuario, nombre, apellido, telefono, rfc, direccion)
-
-    return {"mensaje": "Usuario registrado con éxito", "id_usuario": id_usuario}, 201
-
-def listar_usuarios():
-    return UsuarioModel.obtener_usuarios()
+        try:
+            response, status = UsuarioModel.autenticar_usuario(usuario, password)
+            return jsonify(response), status
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500

@@ -11,9 +11,7 @@ INSERT INTO usuarios (usuario, password, email, tipo_usuario) VALUES
 INSERT INTO clientes (id_usuario, nombre, apellido, telefono, rfc, direccion) VALUES
 (1, 'Carlos', 'Ramírez', '5551234567', 'CARM880101XYZ', 'Calle Falsa 123'),
 (2, 'Laura', 'Pérez', '5557654321', 'LAPE920202ABC', 'Av. Siempre Viva 742'),
-(4, 'Ana', 'García', '5559988776', 'ANGR850505DEF', 'Insurgentes Sur 100'),
-(5, 'Luis', 'Soto', '5551122334', 'LUSO780808GHI', 'Reforma 350'),
-(3, 'Teresa', 'Lopez', '5553344556', 'TELO950909JKL', 'Av. Juárez 90');
+(4, 'Ana', 'García', '5559988776', 'ANGR850505DEF', 'Insurgentes Sur 100');
 
 -- EMPLEADOS
 INSERT INTO empleados (id_usuario, tipo_contrato, nombre, apellido, puesto, sueldo) VALUES
