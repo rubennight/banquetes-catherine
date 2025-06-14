@@ -35,5 +35,5 @@ class EventoService:
         try:
             return registrar_evento_model(data)
         except Exception as e:
-            print(f"Error en registrar_evento_service: {str(e)}")  # Para debug
+            print(f"Error en registrar_evento_service: {str(e)}")
             return jsonify({"error": str(e), "codigo": 500}), 500

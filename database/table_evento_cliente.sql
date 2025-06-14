@@ -18,7 +18,11 @@ BEGIN
 END;
 /
 
+SELECT seq_evento_menu.CURRVAL, seq_evento_menu.NEXTVAL FROM dual;
+
+SELECT MAX(id_evento_menu) FROM evento_menu;
+
 --Esto se debe hacer para que permita insertar nuevos menus
 DROP SEQUENCE seq_evento_menu;
 
-CREATE SEQUENCE seq_evento_menu START WITH 6 INCREMENT BY 1 NOCACHE NOCYCLE;
+CREATE SEQUENCE seq_evento_menu START WITH 8 INCREMENT BY 1 NOCACHE NOCYCLE;
