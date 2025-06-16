@@ -1,0 +1,49 @@
+.platillo-card {
+  width: 70%;
+  max-width: 800px;
+  border-radius: 25px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  margin: 1.5rem auto; /* Centra horizontalmente */
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.platillo-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+}
+
+.platillo-img {
+  width: 100%;
+  height: auto; /* Se ajusta a la imagen */
+  max-height: 300px; /* Limita si es muy grande */
+  object-fit: cover; /* Mantiene recorte elegante si es muy alta */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.platillo-info {
+  padding: 1rem;
+  color: #213547;
+  font-size: 1em;
+  backdrop-filter: blur(2px);
+}
+
+.platillo-info h3 {
+  margin-top: 0;
+  font-size: 1.5rem;
+}
+
+.menus-lista {
+  list-style: none;
+  padding-left: 1rem;
+  margin-top: 0.5rem;
+  color: #333;
+}
+
+.menus-lista li {
+  margin-bottom: 0.3rem;
+}

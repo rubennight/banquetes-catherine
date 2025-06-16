@@ -1,7 +1,8 @@
 import banner from '../assets/images/banquetes-catherine.png';
+import './BienvenidaSeccion.css';
 
 const BienvenidaSeccion = () => {
-    return(
+    return (
         <div className="bienvenida-section-container">
             <div className="bienvenida-contenido">
                 <img 
@@ -18,7 +19,7 @@ const BienvenidaSeccion = () => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default BienvenidaSeccion;

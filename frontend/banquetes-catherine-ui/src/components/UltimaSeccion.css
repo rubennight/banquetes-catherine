@@ -1,0 +1,50 @@
+.ultima-section-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 2rem;
+  flex-wrap: wrap;
+  min-height: 100vh;
+  box-sizing: border-box;
+  margin-top: -40px;
+  padding-top: 80px;
+}
+
+.ultima-banner {
+  flex: 1;
+  min-width: 300px;
+  height: 400px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 25px;
+}
+
+.ultima-description {
+  flex: 1;
+  min-width: 300px;
+  color: #213547;
+  font-size: 1.2em;
+  background-color: rgba(255, 255, 255, 0);
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.ultima-description h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.ultima-description p {
+  margin-bottom: 1.5rem;
+}
+
+.ultima-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Botones reutilizan tus clases globales: text-button-get-started */

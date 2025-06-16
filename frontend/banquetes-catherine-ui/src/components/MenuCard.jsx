@@ -1,12 +1,11 @@
-import PlatilloCard from "../components/PlatilloCard";
+import CartaPlatillo from "../components/CartaPlatillo";
 
-const MenuCard = () =>{
+const MenuCard = () => {
     return (
-        <div className="carousel-section-container">
-            {/* Contenido de ejemplo para hacer scroll */}
-            <PlatilloCard />
+        <div>
+            <CartaPlatillo />
         </div>
-    )
-}
+    );
+};
 
 export default MenuCard;
