@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import UsuariosService from "../../API/classes/UsuariosService";
-import "./CartaPlatillo.css"; // <- Asegúrate de tener este archivo
+import "./PlatilloCard.css"; // <- Asegúrate de tener este archivo
 
-const CartaPlatillo = () => {
+const PlatilloCard = () => {
     const [platillos, setPlatillos] = useState([]);
     const [cargando, setCargando] = useState(true);
     const [error, setError] = useState(null);
@@ -54,4 +54,4 @@ const CartaPlatillo = () => {
     );
 };
 
-export default CartaPlatillo;
+export default PlatilloCard;

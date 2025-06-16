@@ -4,6 +4,10 @@ from service.MenuService import MenuService
 
 menu_controller = Blueprint('menu_controller', __name__)
 
+@menu_controller.route('/menus', methods=['GET'])
+def obtener_menus():
+    return MenuService.obtener_menus()
+
 @menu_controller.route('/menus/obtenerPorId', methods=['GET'])
 def obtener_menu_por_id():
     id_menu = request.args.get('idMenu')
