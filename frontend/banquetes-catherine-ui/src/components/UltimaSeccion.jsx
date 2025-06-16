@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import banner from '../assets/images/roasted-chicken-dinner-platter-delicious-feast.png';
 import './UltimaSeccion.css';
 import ModalLogin from './UltimaSeccionModalLogin';
 
 const UltimaSeccion = () => {
     const [mostrarModal, setMostrarModal] = useState(false);
+    const navigate = useNavigate();
 
     return (
         <div className="ultima-section-container">
@@ -29,6 +31,7 @@ const UltimaSeccion = () => {
                     <button
                         className="text-button-get-started"
                         style={{ background: "#B9C651" }}
+                        onClick={() => navigate('/login')}
                     >
                         Soy colaborador
                     </button>

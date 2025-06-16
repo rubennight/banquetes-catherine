@@ -305,3 +305,148 @@ h1 {
         font-size: 2.2rem;
     }
 }
+
+/* Login y SignUp Styles */
+.login-page, .signup-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                url('../assets/images/banquetes-catherine.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.login-container, .signup-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+}
+
+.login-form-container, .signup-form-container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.login-form-container h2, .signup-form-container h2 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.login-form, .signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.form-group {
+    position: relative;
+    width: 100%;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+    color: #333;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-group input::placeholder {
+    color: #999;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #B9C651;
+    box-shadow: 0 0 0 2px rgba(185, 198, 81, 0.2);
+}
+
+.login-button, .signup-button {
+    width: 100%;
+    background-color: #B9C651;
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+.login-button:hover, .signup-button:hover {
+    background-color: #9da844;
+    transform: translateY(-2px);
+}
+
+.login-link, .signup-link {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #666;
+}
+
+.login-link a, .signup-link a {
+    color: #B9C651;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 0.5rem;
+}
+
+.login-link a:hover, .signup-link a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .login-container, .signup-container {
+        padding: 1rem;
+    }
+
+    .login-form-container, .signup-form-container {
+        padding: 2rem;
+    }
+
+    .login-form-container h2, .signup-form-container h2 {
+        font-size: 1.8rem;
+    }
+
+    .form-group input {
+        padding: 12px;
+    }
+}
+
+.tipo-usuario-select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: white;
+  color: #333;
+  margin-bottom: 15px;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.tipo-usuario-select:hover {
+  border-color: #ff6b6b;
+}
+
+.tipo-usuario-select:focus {
+  outline: none;
+  border-color: #ff6b6b;
+  box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.2);
+}
