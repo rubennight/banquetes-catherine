@@ -1,7 +1,6 @@
 import { useState } from "react";
 
-const CartaPlatillo = (platillo) =>{
-
+const PlatilloCard = (platillo) =>{
     return(
         <div>
             Hola
@@ -9,4 +8,4 @@ const CartaPlatillo = (platillo) =>{
     )
 }
 
-export default CartaPlatillo;
+export default PlatilloCard;

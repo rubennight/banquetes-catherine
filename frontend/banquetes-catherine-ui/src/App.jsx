@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import './index.css';
-import CartaPlatillo from './components/CartaPlatillo';
+import './styles/global.css';
+import PlatilloCard from './components/PlatilloCard';
 import UltimaSeccion from './components/UltimaSeccion';
-import MenuSeccion from './components/MenuSeccion';
+import MenuCard from './components/MenuCard';
 import BienvenidaSeccion from './components/BienvenidaSeccion';
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
       </header>
       <BienvenidaSeccion />
 
-      <MenuSeccion />
+      <MenuCard />
 
       <UltimaSeccion />
     </div>
