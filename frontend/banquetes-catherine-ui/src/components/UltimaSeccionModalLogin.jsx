@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import UsuariosService from "../../API/classes/UsuariosService";
 import MenuService from "../../API/classes/MenuService";
+import PlatillosService from "../../API/classes/PlatillosService"
 import "./UltimaSeccionModalLogin.css";
 
 const ModalLogin = ({ cerrarModal }) => {
@@ -9,6 +10,7 @@ const ModalLogin = ({ cerrarModal }) => {
     const [error, setError] = useState("");
     const [etapa, setEtapa] = useState("login");
     const [datosUsuario, setDatosUsuario] = useState(null);
+    const [platillos, setPlatillos] = useState([]);
 
     // Para el formulario de evento
     const [fechaEvento, setFechaEvento] = useState("");
@@ -18,6 +20,23 @@ const ModalLogin = ({ cerrarModal }) => {
     //Para la parte del menú
     const [menus, setMenus] = useState([]);
     const [menuPersonalizado, setMenuPersonalizado] = useState({});
+
+    useEffect(() => {
+        const cargarPlatillos = async () => {
+            try {
+                const data = await PlatillosService.obtenerPlatillos();
+                setPlatillos(data);
+            } catch (error) {
+                console.error("Error al cargar platillos:", error);
+            }
+        };
+
+        cargarPlatillos();
+    }, []);
+
+    const obtenerPlatillosPorTipo = (tipo) => {
+        return platillos.filter((p) => (p.tipo_platillo || "").toUpperCase() === tipo);
+    };
 
     const handleCrearMenuPersonalizado = (e) => {
         e.preventDefault();
@@ -150,9 +169,7 @@ const ModalLogin = ({ cerrarModal }) => {
                             {["ENTRADA", "SOPA", "PLATILLO_PRINCIPAL", "POSTRE", "BEBIDA", "INFANTIL"].map((tipo) => (
                                 <div key={tipo}>
                                     <label>{tipo}</label>
-                                    <input
-                                        type="text"
-                                        placeholder={`Platillo para ${tipo}`}
+                                    <select
                                         value={menuPersonalizado[tipo] || ""}
                                         onChange={(e) =>
                                             setMenuPersonalizado({
@@ -160,7 +177,14 @@ const ModalLogin = ({ cerrarModal }) => {
                                                 [tipo]: e.target.value,
                                             })
                                         }
-                                    />
+                                    >
+                                        <option value="">Selecciona un platillo</option>
+                                        {obtenerPlatillosPorTipo(tipo).map((platillo) => (
+                                            <option key={platillo.id_platillo} value={platillo.id_platillo}>
+                                                {platillo.descripcion}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </div>
                             ))}
                             <button type="submit">Guardar menú personalizado</button>
