@@ -1,4 +1,4 @@
-import CartaPlatillo from "../components/CartaPlatillo";
+import CartaPlatillo from "../components/PlatilloCard";
 
 const MenuCard = () => {
     return (
