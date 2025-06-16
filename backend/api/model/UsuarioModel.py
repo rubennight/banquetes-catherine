@@ -89,16 +89,25 @@ class UsuarioModel:
             if UsuarioModel.verificar_usuario_existe(usuario, cursor):
                 return {"error": "El nombre de usuario ya está registrado"}, 409
 
+            # Variable para almacenar el ID del usuario insertado
+            new_id_usuario_var = cursor.var(int) # cx_Oracle.NUMBER can also be used if you import cx_Oracle
+
             cursor.execute("""
                 INSERT INTO usuarios (usuario, email, password, tipo_usuario, activo)
                 VALUES (:1, :2, :3, :4, :5)
-            """, (usuario, email, password, tipo_usuario, activo))
+                RETURNING id_usuario INTO :out_id_usuario
+            """, (usuario, email, password, tipo_usuario, activo, new_id_usuario_var))
+            
+            inserted_id = new_id_usuario_var.getvalue()
+            id_usuario_creado = inserted_id[0] if isinstance(inserted_id, list) else inserted_id
+
 
             conexion.commit()
-            return {"mensaje": "Usuario creado correctamente"}, 201
+            return {"mensaje": "Usuario creado correctamente", "id_usuario": id_usuario_creado}, 201
         except Exception as e:
             conexion.rollback()
-            return {"error": str(e)}, 500
+            # Consider logging the full error e for debugging
+            return {"error": "Error al insertar usuario: " + str(e)}, 500
         finally:
             cursor.close()
             conexion.close()
