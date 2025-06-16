@@ -1,4 +1,4 @@
-import banner from '../../assets/images/banquetes-catherine.png';
+import banner from '../assets/images/banquetes-catherine.png';
 
 const BienvenidaSeccion = () => {
     return(

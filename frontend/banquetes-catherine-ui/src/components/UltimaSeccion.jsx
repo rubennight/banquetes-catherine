@@ -1,4 +1,4 @@
-import banner from '../../assets/images/roasted-chicken-dinner-platter-delicious-feast.png';
+import banner from '../assets/images/roasted-chicken-dinner-platter-delicious-feast.png';
 
 const UltimaSeccion = () => {
     return(

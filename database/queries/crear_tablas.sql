@@ -95,8 +95,7 @@ CREATE TABLE platillo_ingrediente (
 -- EVENTOS
 CREATE TABLE eventos (
     id_evento NUMBER PRIMARY KEY,
-    fecha_evento DATE,
-    hora_evento DATE,
+    fecha_evento TIMESTAMP,
     tipo_evento VARCHAR2(250),
     descripcion VARCHAR2(250),
     total_precio NUMBER,

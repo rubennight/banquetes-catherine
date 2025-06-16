@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import './index.css';
-import CartaPlatillo from './components/cartas/CartaPlatillo';
-import UltimaSeccion from './components/landing_page/UltimaSeccion';
-import MenuSeccion from './components/landing_page/MenuSeccion';
-import BienvenidaSeccion from './components/landing_page/BienvenidaSeccion';
+import CartaPlatillo from './components/CartaPlatillo';
+import UltimaSeccion from './components/UltimaSeccion';
+import MenuSeccion from './components/MenuSeccion';
+import BienvenidaSeccion from './components/BienvenidaSeccion';
 
 function App() {
   const [isScrolled, setIsScrolled] = useState(false);
