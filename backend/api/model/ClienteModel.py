@@ -1,38 +1,58 @@
+import oracledb
 from util.Database import obtener_conexion
 
 class ClienteModel:
     @staticmethod
     def insertar_cliente(data):
-        campos_requeridos = ['id_usuario', 'nombre', 'apellido']
+        campos_requeridos = ['usuario', 'password', 'email','nombre', 'apellido']
         for campo in campos_requeridos:
-            if campo not in data or data[campo] is None: # Check for presence and not None
+            if campo not in data or data[campo] is None: 
                 return {"error": f"El campo '{campo}' es requerido"}, 400
 
-        id_usuario = data.get("id_usuario")
+        usuario = data.get("usuario")
+        password = data.get("password")
+        email = data.get("email")
         nombre = data.get("nombre")
         apellido = data.get("apellido")
-        telefono = data.get("telefono") # Optional
-        rfc = data.get("rfc")           # Optional, but unique if provided
-        direccion = data.get("direccion") # Optional
+        telefono = data.get("telefono") 
+        rfc = data.get("rfc")           
+        direccion = data.get("direccion") 
 
         conexion = None
         cursor = None
         try:
             conexion = obtener_conexion()
             cursor = conexion.cursor()
+            
+            cursor.execute("""
+                SELECT 1 FROM USUARIOS WHERE USUARIO = :usuario OR EMAIL = :email
+            """, {
+                "usuario": usuario,
+                "email": email
+            })
 
-            cursor.execute("SELECT COUNT(*) FROM usuarios WHERE id_usuario = :1", (id_usuario,))
-            if cursor.fetchone()[0] == 0:
-                return {"error": f"El id_usuario '{id_usuario}' no existe."}, 404
-
-            cursor.execute("SELECT COUNT(*) FROM clientes WHERE id_usuario = :1", (id_usuario,))
-            if cursor.fetchone()[0] > 0:
-                return {"error": f"El id_usuario '{id_usuario}' ya está asociado a un cliente."}, 409
+            
             
             if rfc:
                 cursor.execute("SELECT COUNT(*) FROM clientes WHERE rfc = :1", (rfc,))
                 if cursor.fetchone()[0] > 0:
                     return {"error": f"El RFC '{rfc}' ya está registrado."}, 409
+                
+            id_usuario_var = cursor.var(oracledb.NUMBER)
+
+            cursor.execute("""
+                INSERT INTO USUARIOS (USUARIO, PASSWORD, EMAIL, TIPO_USUARIO)
+                VALUES (:usuario, :password, :email, :tipo_usuario)
+                RETURNING ID_USUARIO INTO :id_usuario
+            """, {
+                "usuario": usuario,
+                "password": password,
+                "email": email,
+                "tipo_usuario": "CLIENTE",  
+                "id_usuario": id_usuario_var
+            })
+
+            id_usuario = int(id_usuario_var.getvalue()[0])
 
             new_id_cliente_var = cursor.var(int)
 

@@ -1,5 +1,3 @@
-.env
-
 # Logs
 *.log
 
@@ -12,4 +10,3 @@
 
 # Opcional: Ignorar archivos .pyc también, que suelen generarse en __pycache__
 **/*.pyc
-
