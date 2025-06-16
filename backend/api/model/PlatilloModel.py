@@ -12,3 +12,16 @@ def obtener_primeros_platillos():
     cursor.close()
     conexion.close()
     return resultados
+
+def listar_platillos():
+    conexion = obtener_conexion();
+    cursor = conexion.cursor()
+    cursor = conexion.cursor();
+    cursor.execute("""
+                   SELECT * FROM platillos
+                   """)
+    
+    resultados = cursor.fetchall()
+    cursor.close()
+    conexion.close()
+    return resultados

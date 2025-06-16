@@ -127,3 +127,69 @@ def insertar_menu(data):
         "mensaje": "Menú agregado correctamente",
         "id_menu": id_generado
     }), 200
+
+
+def obtener_menus():
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+
+    cursor.execute("""
+        SELECT id_menu, nombre, descripcion, precio,
+               id_platillo_entrada, id_platillo_sopa, id_platillo_plato_principal,
+               id_platillo_postre, id_platillo_bebidas, id_platillo_infantil
+        FROM menus
+    """)
+    menus_raw = cursor.fetchall()
+
+    if not menus_raw:
+        cursor.close()
+        conexion.close()
+        return jsonify({"error": "No se encontraron menús", "codigo": 404}), 404
+
+    lista_menus = []
+
+    for menu in menus_raw:
+        tipos = {
+            "ENTRADA": menu[4],
+            "SOPA": menu[5],
+            "PLATILLO_PRINCIPAL": menu[6],
+            "POSTRE": menu[7],
+            "BEBIDA": menu[8],
+            "INFANTIL": menu[9]
+        }
+
+        platillos = []
+
+        for tipo, id_platillo in tipos.items():
+            if id_platillo:
+                cursor.execute("SELECT descripcion FROM platillos WHERE id_platillo = :1", (id_platillo,))
+                desc = cursor.fetchone()
+                descripcion_platillo = desc[0] if desc else "Sin descripción"
+
+                cursor.execute("""
+                    SELECT i.descripcion, i.tipo_ingrediente
+                    FROM platillo_ingrediente pi
+                    JOIN ingredientes i ON pi.id_ingrediente = i.id_ingrediente
+                    WHERE pi.id_platillo = :1
+                    ORDER BY pi.paso
+                """, (id_platillo,))
+                ingredientes = [{"descripcion": ing[0], "tipo": ing[1]} for ing in cursor.fetchall()]
+
+                platillos.append({
+                    "tipo": tipo,
+                    "descripcion": descripcion_platillo,
+                    "ingredientes": ingredientes
+                })
+
+        lista_menus.append({
+            "idMenu": menu[0],
+            "nombre": menu[1],
+            "descripcion": menu[2],
+            "precio": menu[3],
+            "platillos": platillos
+        })
+
+    cursor.close()
+    conexion.close()
+
+    return jsonify(lista_menus), 200

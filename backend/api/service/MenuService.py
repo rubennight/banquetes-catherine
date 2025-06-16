@@ -1,5 +1,5 @@
 from flask import jsonify
-from model.MenuModel import obtener_menu_con_detalle, insertar_menu
+from model.MenuModel import obtener_menu_con_detalle, insertar_menu, obtener_menus
 
 class MenuService:
 
@@ -12,3 +12,7 @@ class MenuService:
     @staticmethod
     def agregar_menu(data):
         return insertar_menu(data)
+    
+    @staticmethod
+    def obtener_menus():
+        return obtener_menus()

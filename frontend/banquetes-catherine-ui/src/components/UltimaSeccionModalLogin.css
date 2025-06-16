@@ -104,3 +104,78 @@
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+.modal-content form select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 2px solid rgba(33, 53, 71, 0.3);
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.3);
+  color: #213547;
+  appearance: none;
+  transition: border-color 0.3s ease;
+}
+
+.modal-content form select:focus {
+  border-color: #B9C651;
+  outline: none;
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.contenedor-menus {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    overflow-y: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+    max-height: 400px; /* o el que necesites */
+    padding: 1rem 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+}
+
+.contenedor-menus::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+}
+
+.tarjeta-menu {
+    background: #f9f9f985;
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.tarjeta-menu h4 {
+    margin: 0;
+    margin-bottom: 0.5rem;
+}
+
+.tarjeta-menu ul {
+    padding-left: 1rem;
+    margin: 0.5rem 0;
+}
+
+.tarjeta-menu button {
+    margin-top: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    background-color: #213547;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.tarjeta-menu button:hover {
+    background-color: #B9C651;
+}
+
+.tarjeta-menu ul {
+    list-style: none; 
+    padding-left: 0;
+    margin: 0.5rem 0;
+}
