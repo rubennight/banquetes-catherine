@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import UsuariosService from "../../API/classes/UsuariosService";
-import "./CartaPlatillo.css"; // <- Asegúrate de tener este archivo
+import "./PlatilloCard.css"; // <- Asegúrate de tener este archivo
 
 const PlatilloCard = () => {
     const [platillos, setPlatillos] = useState([]);
