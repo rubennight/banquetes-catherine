@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const LoginForm = () => {
   const [formData, setFormData] = useState({
@@ -7,6 +8,7 @@ const LoginForm = () => {
     password: ''
   });
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,15 +31,21 @@ const LoginForm = () => {
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('userData', JSON.stringify({
-          id_usuario: data.id_usuario,
-          usuario: data.usuario,
-          email: data.email,
-          tipo_usuario: data.tipo_usuario,
-          activo: data.activo
-        }));
-        navigate('/eventos');
+        login(data);
+
+        switch (data.tipo_usuario) {
+          case 'CLIENTE':
+            navigate('/cliente-dashboard');
+            break;
+          case 'GERENTE_CUENTAS':
+          case 'GERENTE_EVENTOS':
+          case 'GERENTE_RH':
+            navigate('/gerente-dashboard');
+            break;
+          default:
+            navigate('/');
+        }
+
       } else {
         const errorData = await response.json();
         alert(errorData.error || 'Error en el inicio de sesión. Por favor, verifica tus credenciales.');

@@ -450,3 +450,175 @@ h1 {
   border-color: #ff6b6b;
   box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.2);
 }
+
+/* Estilos para Dashboards */
+.dashboard-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: var(--color-cream);
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.dashboard-container h2, .dashboard-container h3 {
+  color: #333;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.sub-dashboard-container {
+  padding: 1.5rem;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  margin-top: 1.5rem;
+}
+
+.sub-dashboard-container h3 {
+  color: #5a4a3a;
+  margin-bottom: 1rem;
+}
+
+.dashboard-nav {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.dashboard-nav-link {
+  background-color: #B9C651;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.dashboard-nav-link:hover {
+  background-color: #9da844;
+  transform: translateY(-2px);
+}
+
+.dashboard-content {
+  margin-top: 2rem;
+  padding: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.eventos-list, .events-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.evento-card, .event-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 1.2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.evento-card:hover, .event-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.event-card.selected {
+  border-color: #B9C651;
+  box-shadow: 0 0 0 3px rgba(185, 198, 81, 0.3);
+}
+
+.evento-card h4, .event-card h5 {
+  color: #5a4a3a;
+  margin-top: 0;
+  margin-bottom: 0.8rem;
+}
+
+.evento-card p, .event-card p {
+  margin-bottom: 0.5rem;
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.error-message {
+  color: #d9534f;
+  background-color: #f2dede;
+  border: 1px solid #ebccd1;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.feature-section {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px dashed #eee;
+}
+
+.feature-section h4 {
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.feature-section ul {
+  list-style-type: disc;
+  margin-left: 20px;
+  color: #555;
+}
+
+.feature-section li {
+  margin-bottom: 0.5rem;
+}
+
+.assignment-section {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #e6ffe6; /* Light green background */
+  border: 1px solid #a8e8a8; /* Green border */
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.assignment-section h4 {
+  color: #2e8b57; /* Dark green for heading */
+  margin-top: 0;
+}
+
+.select-employee {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.assign-button {
+  background-color: #28a745; /* Bootstrap Green */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.assign-button:hover {
+  background-color: #218838;
+}
