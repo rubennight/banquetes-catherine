@@ -9,8 +9,8 @@ class PlatillosService:
         Obtiene la lista de todos los platillos
         """
         try:
-            platillos, status = listar_platillos()
-            return jsonify(platillos), status
+            platillos = listar_platillos()  
+            return platillos 
         except Exception as e:
-            return jsonify({"error": str(e)}), 500
+            raise e 
 
