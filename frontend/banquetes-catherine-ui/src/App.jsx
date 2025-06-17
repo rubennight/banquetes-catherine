@@ -12,6 +12,7 @@ import GerenteDashboard from './pages/GerenteDashboard';
 import GerenteCuentas from './pages/GerenteCuentas';
 import GerenteEventos from './pages/GerenteEventos';
 import GerenteRH from './pages/GerenteRH';
+import { useNavigate } from 'react-router-dom';
 
 function PrivateRoute({ children, allowedRoles }) {
   const { user } = useAuth();
@@ -27,6 +28,7 @@ function PrivateRoute({ children, allowedRoles }) {
 function AppContent() {
   const [isScrolled, setIsScrolled] = useState(false);
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
